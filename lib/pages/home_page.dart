@@ -1,131 +1,166 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'adoption_request_page.dart';
-import 'donation_page.dart';
-import 'login_page.dart';
-import 'pet_list_page.dart';
-import 'volunteer_page.dart';
+import 'donation_page.dart'; // Import Donation Page
+import 'favorite_pets_page.dart'; // Import Favorite Pets page
+import 'login_page.dart'; // Import Login Page for navigation
+import 'pet_list_page.dart'; // Import Pet List Page
+import 'volunteer_page.dart'; // Import Volunteer page
 
-class HomePage extends StatelessWidget {
-  Future<void> logout(BuildContext context) async {
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0; // Track the selected tab
+
+  // List of pages for the Bottom Navigation
+  final List<Widget> _pages = [
+    HomeSection(),  // Home section
+    FavoritePetsPage(),  // Favorite pets section
+    DonationPage(),  // Donation section
+    VolunteerPage(),  // Volunteer section
+  ];
+
+  // Function to handle Bottom Navigation change
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  // Handle logout
+  Future<void> _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', false);
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginPage()));
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()), // Navigate to LoginPage
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Noah’s Ark Dog and Cat Shelter',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: Text('Noah’s Ark Dog and Cat Shelter'),
         actions: [
           IconButton(
-            icon: Icon(Icons.info_outline),
-            onPressed: () {
-              showAboutDialog(
-                context: context,
-                applicationName: 'Noah’s Ark Dog and Cat Shelter',
-                applicationVersion: '1.0.0',
-                children: [
-                  Text(
-                    'Noah’s Ark is a non-profit animal shelter dedicated to providing care, rehabilitation, and rehoming for abandoned and rescued dogs and cats.',
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              );
-            },
+            icon: Icon(Icons.exit_to_app),
+            onPressed: _logout, // Logout functionality
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(20),
+      body: _pages[_selectedIndex], // Show the page based on selected index
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favorites',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.monetization_on),
+            label: 'Donate',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.volunteer_activism),
+            label: 'Volunteer',
+          ),
+        ],
+        currentIndex: _selectedIndex, // Current tab index
+        onTap: _onItemTapped, // Handle tab change
+        selectedItemColor: Colors.blueAccent,
+        unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,  // Show labels even for unselected items
+      ),
+    );
+  }
+}
+
+// Home Section (Main content of Home Page)
+class HomeSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(20.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              "Welcome to Noah’s Ark Dog and Cat Shelter!",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+            // App Logo or Banner Image (Optional)
+            Image.asset(
+              'assets/images/shelter_banner.jpg', // Add a banner or logo image here
+              height: 150,
+              fit: BoxFit.cover,
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 20),
+            
+            // Greeting message
             Text(
-              "Explore our services, adopt a pet, volunteer, or donate to support our mission.",
-              style: TextStyle(fontSize: 16),
+              'Welcome to Noah’s Ark Shelter!',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 20),
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                children: [
-                  _buildFeatureCard(
-                    context,
-                    "Available Pets",
-                    Icons.pets,
-                    PetListPage(),
-                  ),
-                  _buildFeatureCard(
-                    context,
-                    "Adopt a Pet",
-                    Icons.favorite,
-                    AdoptionRequestPage(),
-                  ),
-                  _buildFeatureCard(
-                    context,
-                    "Donate",
-                    Icons.monetization_on,
-                    DonationPage(),
-                  ),
-                  _buildFeatureCard(
-                    context,
-                    "Volunteer",
-                    Icons.volunteer_activism,
-                    VolunteerPage(),
-                  ),
-                ],
+            Text(
+              'Explore the pets available for adoption, manage your favorites, volunteer, or donate to support our shelter.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+            ),
+            SizedBox(height: 40),
+
+            // Buttons to explore available pets, donate, or volunteer (if needed)
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to Pet List or Pet Details page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PetListPage()),
+                );
+              },
+              child: Text('Explore Available Pets'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 50),
+                textStyle: TextStyle(fontSize: 18),
               ),
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => logout(context),
-              child: Text("Logout"),
+              onPressed: () {
+                // Navigate to Donation Page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DonationPage()),
+                );
+              },
+              child: Text('Donate Now'),
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
+                textStyle: TextStyle(fontSize: 18),
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFeatureCard(
-      BuildContext context, String title, IconData icon, Widget page) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 5,
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => page),
-          );
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 50, color: Colors.blueAccent),
-            SizedBox(height: 10),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to Volunteer Page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => VolunteerPage()),
+                );
+              },
+              child: Text('Become a Volunteer'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 50),
+                textStyle: TextStyle(fontSize: 18),
+              ),
             ),
           ],
         ),

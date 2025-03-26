@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "678813210667",
+    "project_id": "noahs-arc-e7477",
+    "storage_bucket": "noahs-arc-e7477.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:678813210667:android:c0a7b2f51119d3f1b4726e",
+        "android_client_info": {
+          "package_name": "com.example.napas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB02pPOivj4Z-rCVmbBCLyyIKAMNj2QamE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
