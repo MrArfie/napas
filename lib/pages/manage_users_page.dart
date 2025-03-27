@@ -62,12 +62,15 @@ class _UserManagementPageState extends State<UserManagementPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Management'),
+        backgroundColor: Colors.deepPurpleAccent,
+        title: Text(
+          'User Management',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              // Navigate to Add User Page
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AddUserPage()),
@@ -77,31 +80,50 @@ class _UserManagementPageState extends State<UserManagementPage> {
         ],
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())  // Show loading spinner while fetching data
-          : ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(users[index]['name']),
-                  subtitle: Text('Role: ${users[index]['role']}'),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      // Delete user on press
-                      deleteUser(users[index]['id']);
-                    },
-                  ),
-                  onTap: () {
-                    // Navigate to Edit User Page
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditUserPage(user: users[index]),
+          ? Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: EdgeInsets.all(16.0),
+              child: ListView.builder(
+                itemCount: users.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 5,
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(16),
+                      title: Text(
+                        users[index]['name'],
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.deepPurpleAccent,
+                        ),
                       ),
-                    );
-                  },
-                );
-              },
+                      subtitle: Text(
+                        'Role: ${users[index]['role']}',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          deleteUser(users[index]['id']);
+                        },
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditUserPage(user: users[index]),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
     );
   }
@@ -154,6 +176,7 @@ class _AddUserPageState extends State<AddUserPage> {
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFormField(
                 controller: _nameController,
@@ -190,6 +213,11 @@ class _AddUserPageState extends State<AddUserPage> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: addUser,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurpleAccent, // Button color
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
                 child: Text('Add User'),
               ),
             ],
@@ -287,6 +315,11 @@ class _EditUserPageState extends State<EditUserPage> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: updateUser,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurpleAccent, // Button color
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
                 child: Text('Update User'),
               ),
             ],

@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'pet_list_page.dart'; // Import the PetListPage
+
 class PetManagementPage extends StatefulWidget {
   @override
   _PetManagementPageState createState() => _PetManagementPageState();
@@ -38,9 +40,16 @@ class _PetManagementPageState extends State<PetManagementPage> {
       }
 
       // Process and save pet data (upload image, save pet details to database)
-      // For now, we just show the data in a snackbar
+      // For now, we'll simulate this by showing a success message and navigating to the Pet List Page
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Pet added successfully!')));
-      // Navigate or handle data submission
+
+      // Navigate to the Pet List page with the new pet data
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PetListPage(), // Navigate to PetListPage
+        ),
+      );
     }
   }
 

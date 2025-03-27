@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:napas/pages/VolunteerListPage.dart';
 
 class VolunteerPage extends StatefulWidget {
   @override
@@ -12,17 +13,32 @@ class _VolunteerPageState extends State<VolunteerPage> {
   final TextEditingController skillsController = TextEditingController();
   bool availability = false;
 
+  // Function to submit the volunteer form
   void _submitVolunteerForm() {
     if (_formKey.currentState!.validate()) {
+      // Simulating saving the data to a static list
+      final volunteer = {
+        'name': nameController.text,
+        'contact': contactController.text,
+        'skills': skillsController.text,
+        'availability': availability,
+      };
+
+      // Show confirmation
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Thank you for signing up, ${nameController.text}!')),
       );
+
+      // Clear form fields after submission
       nameController.clear();
       contactController.clear();
       skillsController.clear();
       setState(() {
         availability = false;
       });
+
+      // Simulate sending the data to VolunteerListPage
+      VolunteerListPage.volunteers.add(volunteer); // Add to the volunteer list in the admin view
     }
   }
 

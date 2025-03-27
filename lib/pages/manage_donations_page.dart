@@ -15,13 +15,13 @@ class _DonationManagementPageState extends State<DonationManagementPage> {
   @override
   void initState() {
     super.initState();
-    fetchDonations(); // Fetch donations from the backend when the page is initialized
+    fetchDonations();  // Fetch donations from the backend when the page is initialized
   }
 
   // Fetch donations from the backend
   Future<void> fetchDonations() async {
     try {
-      final response = await http.get(Uri.parse('http://localhost:5000/api/donations')); // Your backend API to fetch donations
+      final response = await http.get(Uri.parse('http://localhost:5000/api/donations'));
       if (response.statusCode == 200) {
         setState(() {
           donations = json.decode(response.body);
@@ -45,7 +45,7 @@ class _DonationManagementPageState extends State<DonationManagementPage> {
   Future<void> deleteDonation(String donationId) async {
     try {
       final response = await http.delete(
-        Uri.parse('http://localhost:5000/api/donations/$donationId'),  // Your backend URL to delete donation
+        Uri.parse('http://localhost:5000/api/donations/$donationId'),
       );
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Donation deleted successfully')));
@@ -62,12 +62,15 @@ class _DonationManagementPageState extends State<DonationManagementPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Donation Management'),
+        backgroundColor: Colors.pinkAccent, // Use a cute color for the app bar
+        title: Text(
+          'Donation Management',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: Icon(Icons.add, size: 30),
             onPressed: () {
-              // Navigate to Add Donation Page
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AddDonationPage()),
@@ -78,30 +81,50 @@ class _DonationManagementPageState extends State<DonationManagementPage> {
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())  // Show loading spinner while fetching data
-          : ListView.builder(
-              itemCount: donations.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text('Donor: ${donations[index]['donorName']}'),
-                  subtitle: Text('Amount: \$${donations[index]['amount']}'),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      // Delete donation on press
-                      deleteDonation(donations[index]['id']);
-                    },
-                  ),
-                  onTap: () {
-                    // Navigate to Edit Donation Page
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditDonationPage(donation: donations[index]),
+          : Padding(
+              padding: EdgeInsets.all(16.0),
+              child: ListView.builder(
+                itemCount: donations.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 5,
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(16),
+                      title: Text(
+                        'Donor: ${donations[index]['donorName']}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.pinkAccent,
+                        ),
                       ),
-                    );
-                  },
-                );
-              },
+                      subtitle: Text(
+                        'Amount: \$${donations[index]['amount']}',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          deleteDonation(donations[index]['id']);
+                        },
+                      ),
+                      onTap: () {
+                        // Navigate to Edit Donation Page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditDonationPage(donation: donations[index]),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
     );
   }
@@ -126,7 +149,7 @@ class _AddDonationPageState extends State<AddDonationPage> {
     }
 
     final response = await http.post(
-      Uri.parse('http://localhost:5000/api/donations'),  // Your backend API to add a new donation
+      Uri.parse('http://localhost:5000/api/donations'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'donorName': _donorNameController.text,
@@ -173,6 +196,10 @@ class _AddDonationPageState extends State<AddDonationPage> {
               ElevatedButton(
                 onPressed: addDonation,
                 child: Text('Add Donation'),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 15), backgroundColor: const Color.fromARGB(255, 120, 155, 143),
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold), // Button color
+                ),
               ),
             ],
           ),
@@ -213,7 +240,7 @@ class _EditDonationPageState extends State<EditDonationPage> {
     }
 
     final response = await http.put(
-      Uri.parse('http://localhost:5000/api/donations/${widget.donation['id']}'),  // Your backend URL to update donation
+      Uri.parse('http://localhost:5000/api/donations/${widget.donation['id']}'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'donorName': _donorNameController.text,
@@ -260,6 +287,10 @@ class _EditDonationPageState extends State<EditDonationPage> {
               ElevatedButton(
                 onPressed: updateDonation,
                 child: Text('Update Donation'),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 15), backgroundColor: const Color.fromARGB(255, 69, 119, 81),
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold), // Button color
+                ),
               ),
             ],
           ),

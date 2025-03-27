@@ -101,74 +101,131 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Account'),
+        backgroundColor: Colors.deepPurpleAccent,
+        title: Text(
+          'Create Account',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Card(
-          elevation: 8,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  // Name field
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: InputDecoration(labelText: 'Name'),
-                    validator: (value) => value!.isEmpty ? 'Please enter your name' : null,
-                  ),
-                  SizedBox(height: 20),
-
-                  // Email field
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(labelText: 'Email'),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (value) => value!.isEmpty ? 'Please enter your email' : null,
-                  ),
-                  SizedBox(height: 20),
-
-                  // Password field
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(labelText: 'Password'),
-                    obscureText: !_showPassword,
-                    validator: (value) => value!.length < 6 ? 'Password must be at least 6 characters' : null,
-                  ),
-                  SizedBox(height: 20),
-
-                  // Confirm Password field
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    decoration: InputDecoration(labelText: 'Confirm Password'),
-                    obscureText: !_showConfirmPassword,
-                    validator: (value) => !_passwordsMatch() ? 'Passwords do not match' : null,
-                  ),
-                  SizedBox(height: 20),
-
-                  // Register button
-                  ElevatedButton(
-                    onPressed: _loading ? null : _register,
-                    child: Text(_loading ? 'Registering...' : 'Register'),
-                  ),
-                  SizedBox(height: 20),
-
-                  // Login Link
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/login');
-                      },
-                      child: Text('Already have an account? Login'),
+        padding: EdgeInsets.all(16.0),
+        child: Center(
+          child: Card(
+            elevation: 10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(24.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Name field
+                    TextFormField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        labelText: 'Name',
+                        prefixIcon: Icon(Icons.person, color: Colors.deepPurple),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      validator: (value) => value!.isEmpty ? 'Please enter your name' : null,
                     ),
-                  ),
-                ],
+                    SizedBox(height: 20),
+
+                    // Email field
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        prefixIcon: Icon(Icons.email, color: Colors.deepPurple),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) => value!.isEmpty ? 'Please enter your email' : null,
+                    ),
+                    SizedBox(height: 20),
+
+                    // Password field
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: Icon(Icons.lock, color: Colors.deepPurple),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _showPassword ? Icons.visibility : Icons.visibility_off,
+                            color: Colors.deepPurple,
+                          ),
+                          onPressed: _togglePasswordVisibility,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      obscureText: !_showPassword,
+                      validator: (value) => value!.length < 6 ? 'Password must be at least 6 characters' : null,
+                    ),
+                    SizedBox(height: 20),
+
+                    // Confirm Password field
+                    TextFormField(
+                      controller: _confirmPasswordController,
+                      decoration: InputDecoration(
+                        labelText: 'Confirm Password',
+                        prefixIcon: Icon(Icons.lock, color: Colors.deepPurple),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _showConfirmPassword ? Icons.visibility : Icons.visibility_off,
+                            color: Colors.deepPurple,
+                          ),
+                          onPressed: _toggleConfirmPasswordVisibility,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      obscureText: !_showConfirmPassword,
+                      validator: (value) => !_passwordsMatch() ? 'Passwords do not match' : null,
+                    ),
+                    SizedBox(height: 20),
+
+                    // Register button
+                    ElevatedButton(
+                      onPressed: _loading ? null : _register,
+                      child: _loading
+                          ? CircularProgressIndicator(color: Colors.white)
+                          : Text('Register', style: TextStyle(fontSize: 18, color: Colors.white)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepPurpleAccent,
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+
+                    // Login Link
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/login');
+                        },
+                        child: Text(
+                          'Already have an account? Login',
+                          style: TextStyle(color: Colors.deepPurpleAccent),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

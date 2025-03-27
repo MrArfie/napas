@@ -22,7 +22,6 @@ class _PetListPageState extends State<PetListPage> {
           isLoading = false;
         });
       } else {
-        // If fetching fails
         setState(() {
           isLoading = false;
         });
@@ -47,6 +46,7 @@ class _PetListPageState extends State<PetListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Available Pets for Adoption'),
+        backgroundColor: Colors.blueAccent,
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator()) // Show loading spinner while fetching data
@@ -70,27 +70,23 @@ class _PetListPageState extends State<PetListPage> {
   // Function to build each pet card
   Widget _buildPetCard(BuildContext context, Map<String, dynamic> pet) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 8,
       child: InkWell(
         onTap: () {
-          // Navigate to Pet Details Page
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PetDetailsPage(pet: pet),
-            ),
-          );
+          // Show pet details in modal
+          _showPetDetailsModal(context, pet);
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
               child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                 child: Image.network(
-                  pet['imageUrl'], // Display pet image from URL
+                  pet['imageUrl'],
                   width: double.infinity,
+                  height: 180,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -115,66 +111,83 @@ class _PetListPageState extends State<PetListPage> {
       ),
     );
   }
-}
 
-// Pet Details Page to show more information about the pet
-class PetDetailsPage extends StatelessWidget {
-  final Map<String, dynamic> pet;
+  // Function to show the pet details modal
+  void _showPetDetailsModal(BuildContext context, Map<String, dynamic> pet) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('${pet['name']} - Details'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.network(
+                  pet['imageUrl'],
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(height: 20),
+                Text('Breed: ${pet['breed']}', style: TextStyle(fontSize: 18)),
+                SizedBox(height: 10),
+                Text('Age: ${pet['age']}', style: TextStyle(fontSize: 18)),
+                SizedBox(height: 10),
+                Text('Vaccinated: ${pet['vaccinated'] ? 'Yes' : 'No'}', style: TextStyle(fontSize: 18)),
+                SizedBox(height: 10),
+                Text('Story: ${pet['story']}', style: TextStyle(fontSize: 18)),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    // Navigate to Adoption Request Form
+                    Navigator.pop(context); // Close the modal
+                    _showAdoptionForm(context, pet);
+                  },
+                  child: Text('Adopt ${pet['name']}'),
+                  style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 50)),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
-  PetDetailsPage({required this.pet});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${pet['name']}\'s Details'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Image.network(
-              pet['imageUrl'],
-              height: 200,
-              width: double.infinity,
-              fit: BoxFit.cover,
+  // Function to show the adoption form
+  void _showAdoptionForm(BuildContext context, Map<String, dynamic> pet) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Adopt ${pet['name']}'),
+          content: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                TextField(
+                  decoration: InputDecoration(labelText: 'Your Name'),
+                ),
+                SizedBox(height: 10),
+                TextField(
+                  decoration: InputDecoration(labelText: 'Contact Information'),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    // Simulate sending the adoption request
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Adoption request submitted!')));
+                    Navigator.pop(context); // Close the adoption form modal
+                  },
+                  child: Text('Submit Adoption Request'),
+                  style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 50)),
+                ),
+              ],
             ),
-            SizedBox(height: 20),
-            Text(
-              'Name: ${pet['name']}',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Breed: ${pet['breed']}',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Age: ${pet['age']}',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Vaccinated: ${pet['vaccinated'] ? 'Yes' : 'No'}',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Story: ${pet['story']}',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Add logic to allow the user to adopt or favorite the pet
-              },
-              child: Text('Adopt ${pet['name']}'),
-              style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 50)),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:napas/pages/admin-login.dart'; // Admin login import
+import 'package:napas/pages/admin-login.dart';
 import 'package:napas/pages/home_page.dart';
 import 'package:napas/pages/login_page.dart';
-import 'package:napas/services/AuthService.dart'; // AuthService for authentication check
+import 'package:napas/pages/manage_donations_page.dart';
+import 'package:napas/pages/manage_pets_page.dart';
+import 'package:napas/pages/manage_users_page.dart';
+import 'package:napas/pages/register_page.dart';
+import 'package:napas/services/AuthService.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,12 +35,13 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => LoginPage(),
         '/home': (context) => HomePage(),
-        '/admin-login': (context) => AdminLoginPage(), // Admin login route
-        '/splash': (context) => SplashScreen(), // SplashScreen route
+        '/admin-login': (context) => AdminLoginPage(),
+        '/splash': (context) => SplashScreen(),
         '/admin-dashboard': (context) => AdminDashboardPage(), // Admin Dashboard route
-        '/admin/manage-users': (context) => ManageUsersPage(), // Manage Users route
-        '/admin/manage-pets': (context) => ManagePetsPage(), // Manage Pets route
-        '/admin/manage-donations': (context) => ManageDonationsPage(), // Manage Donations route
+        '/admin/manage-users': (context) => UserManagementPage(), // Manage Users route
+        '/admin/manage-pets': (context) => PetManagementPage(), // Manage Pets route
+        '/admin/manage-donations': (context) => DonationManagementPage(), // Manage Donations route
+        '/register': (context) => RegisterPage(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/admin-dashboard') {

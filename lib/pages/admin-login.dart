@@ -1,4 +1,3 @@
-// lib/pages/admin-login.dart
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -50,7 +49,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      final userRole = data['user']['role'];  // Extract the role
+      final userRole = data['user']['role']; // Extract the role
 
       if (userRole == 'admin') {
         // Successful admin login, navigate to Admin Dashboard
@@ -76,58 +75,109 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin Login'),
+        backgroundColor: Colors.deepPurpleAccent,
+        title: Text(
+          'Admin Login',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Card(
-          elevation: 8,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  // Email Field
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(labelText: 'Email'),
-                    validator: (value) =>
-                        value!.isEmpty ? 'Please enter your email' : null,
-                  ),
-                  SizedBox(height: 20),
+        padding: EdgeInsets.all(16.0),
+        child: Center(
+          child: Card(
+            elevation: 10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(24.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Email Field
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        prefixIcon: Icon(Icons.email, color: Colors.deepPurple),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      validator: (value) => value!.isEmpty
+                          ? 'Please enter your email'
+                          : null,
+                    ),
+                    SizedBox(height: 20),
 
-                  // Password Field
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(labelText: 'Password'),
-                    obscureText: !showPassword,
-                    validator: (value) {
-                      if (value!.length < 6) {
-                        return 'Password must be at least 6 characters';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 20),
+                    // Password Field
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: Icon(Icons.lock, color: Colors.deepPurple),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            showPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: togglePasswordVisibility,
+                          color: Colors.deepPurple,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      obscureText: !showPassword,
+                      validator: (value) {
+                        if (value!.length < 6) {
+                          return 'Password must be at least 6 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 20),
 
-                  // Submit Button
-                  ElevatedButton(
-                    onPressed: isLoading ? null : onSubmit,
-                    child: isLoading
-                        ? CircularProgressIndicator()
-                        : Text('Login'),
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
+                    // Submit Button
+                    ElevatedButton(
+                      onPressed: isLoading ? null : onSubmit,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepPurpleAccent,
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: isLoading
+                          ? CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : Text(
+                              'Login',
+                              style: TextStyle(fontSize: 18, color: Colors.white),
+                            ),
+                    ),
+                    SizedBox(height: 20),
+
+                    // Forgot Password (optional, if relevant)
+                    GestureDetector(
+                      onTap: () {
+                        // Implement forgot password functionality
+                      },
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          color: Colors.deepPurpleAccent,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

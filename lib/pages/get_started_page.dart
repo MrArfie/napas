@@ -6,21 +6,27 @@ class GetStartedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent, // Transparent background for gradient
+      backgroundColor: Colors.white, // Soft background color
       appBar: AppBar(
-        title: Text('Get Started'),
-        backgroundColor: Colors.blueAccent, // App bar color matching the background
+        title: Row(
+          children: [
+            Icon(Icons.pets, size: 30, color: Colors.pinkAccent), // Pet Icon
+            SizedBox(width: 10),
+            Text('Noah\'s Ark Shelter', style: TextStyle(fontSize: 22)),
+          ],
+        ),
+        backgroundColor: Colors.pinkAccent, // Light, welcoming color
       ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Logo or Image (Optional)
+              // Logo or Image
               Image.asset(
                 'assets/images/24.gif', // Replace with your logo path
-                width: 200,
-                height: 200,
+                width: 180,
+                height: 180,
               ),
               SizedBox(height: 30),
 
@@ -28,12 +34,13 @@ class GetStartedPage extends StatelessWidget {
               AnimatedDefaultTextStyle(
                 duration: const Duration(milliseconds: 500),
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: Colors.pinkAccent,
+                  fontFamily: 'Comfortaa', // Playful, friendly font
                 ),
                 child: Text(
-                  'Welcome to Noah\'s Ark Dog and Cat Shelter!',
+                  'Welcome to Noah\'s Ark!',
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -44,41 +51,23 @@ class GetStartedPage extends StatelessWidget {
                 duration: const Duration(milliseconds: 500),
                 style: TextStyle(
                   fontSize: 18,
-                  color: Colors.white70,
+                  color: Colors.grey[600],
+                  fontFamily: 'Poppins', // Clean and modern font
                 ),
                 child: Text(
-                  'At Noah\'s Ark, we are dedicated to rescuing and rehabilitating abandoned dogs and cats, '
-                  'providing them with a safe, loving environment. Your involvement helps us make a difference. '
-                  '\n\nAdopt a pet, donate, volunteer, or simply spread the word to help our furry friends.',
+                  'We rescue and rehabilitate abandoned dogs and cats, giving them a second chance at life. '
+                  'Join us in our mission to provide a loving home for every pet.',
                   textAlign: TextAlign.center,
                 ),
               ),
               SizedBox(height: 40),
 
-              // Ways to contribute
+              // Ways to contribute (List of contributions)
               Column(
                 children: [
-                  ListTile(
-                    leading: Icon(Icons.pets, color: Colors.white),
-                    title: Text(
-                      'Adopt a Pet',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.volunteer_activism, color: Colors.white),
-                    title: Text(
-                      'Become a Volunteer',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.monetization_on, color: Colors.white),
-                    title: Text(
-                      'Donate to Support Our Shelter',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                  ),
+                  _buildListTile(Icons.pets, 'Adopt a Pet'),
+                  _buildListTile(Icons.volunteer_activism, 'Become a Volunteer'),
+                  _buildListTile(Icons.monetization_on, 'Donate to Our Shelter'),
                 ],
               ),
               SizedBox(height: 40),
@@ -87,9 +76,9 @@ class GetStartedPage extends StatelessWidget {
               AnimatedContainer(
                 duration: Duration(seconds: 1),
                 curve: Curves.easeInOut,
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.pinkAccent,
                   borderRadius: BorderRadius.circular(30),
                   boxShadow: [
                     BoxShadow(
@@ -109,14 +98,36 @@ class GetStartedPage extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, foregroundColor: Colors.blueAccent, // Text colorbackgroundColor
+                    backgroundColor: Colors.white, // Background color
+                    foregroundColor: const Color.fromARGB(255, 226, 224, 225), // Text color
                     minimumSize: Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                     textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   child: Text('Get Started'),
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Method to build the list tiles
+  Widget _buildListTile(IconData icon, String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: ListTile(
+        leading: Icon(icon, color: const Color.fromARGB(255, 64, 255, 150)),
+        title: Text(
+          text,
+          style: TextStyle(
+            fontSize: 20,
+            color: const Color.fromARGB(255, 64, 233, 255),
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
