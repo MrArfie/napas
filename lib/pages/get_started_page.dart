@@ -78,7 +78,7 @@ class GetStartedPage extends StatelessWidget {
                 curve: Curves.easeInOut,
                 padding: EdgeInsets.symmetric(horizontal: 50, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.pinkAccent,
+                  color: const Color.fromARGB(255, 143, 72, 24),
                   borderRadius: BorderRadius.circular(30),
                   boxShadow: [
                     BoxShadow(

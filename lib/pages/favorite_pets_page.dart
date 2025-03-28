@@ -12,13 +12,13 @@ class _FavoritePetsPageState extends State<FavoritePetsPage> {
       'name': 'Buddy',
       'type': 'Dog',
       'age': '2 years',
-      'image': 'assets/images/buddy.jpg', // Replace with your pet images
+      'image': 'assets/images/d1.png', // Replace with your pet images
     },
     {
       'name': 'Mittens',
       'type': 'Cat',
       'age': '1 year',
-      'image': 'assets/images/mittens.jpg', // Replace with your pet images
+      'image': 'assets/images/cat2.png', // Replace with your pet images
     },
   ];
 

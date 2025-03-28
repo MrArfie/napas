@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:napas/models/pet.model.dart'; // Import Pet model
+import 'package:napas/services/PetService.dart'; // Import PetService
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'donation_page.dart'; // Import Donation Page
-import 'favorite_pets_page.dart'; // Import Favorite Pets page
+import 'favorite_pets_page.dart'; // Import Favorite Pets Page
 import 'login_page.dart'; // Import Login Page for navigation
-import 'pet_list_page.dart'; // Import Pet List Page
-import 'volunteer_page.dart'; // Import Volunteer page
+import 'pet_list_page.dart'; // Import PetListPage
+import 'volunteer_page.dart'; // Import Volunteer Page
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,6 +18,25 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0; // Track the selected tab
+
+  final PetService _petService = PetService();  // Initialize PetService
+  List<Pet> pets = []; // Store the list of pets
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchPets();  // Fetch pets when the page loads
+  }
+
+  // Fetch pets using PetService
+  Future<void> _fetchPets() async {
+    try {
+      pets = await _petService.getPets();
+      setState(() {});
+    } catch (e) {
+      print("Failed to load pets: $e");
+    }
+  }
 
   // List of pages for the Bottom Navigation
   final List<Widget> _pages = [
@@ -97,7 +118,7 @@ class HomeSection extends StatelessWidget {
           children: [
             // App Logo or Banner Image (Optional)
             Image.asset(
-              'assets/images/shelter_banner.jpg', // Add a banner or logo image here
+              'assets/images/cat1.png', // Add a banner or logo image here
               height: 150,
               fit: BoxFit.cover,
             ),
@@ -120,10 +141,12 @@ class HomeSection extends StatelessWidget {
             // Buttons to explore available pets, donate, or volunteer (if needed)
             ElevatedButton(
               onPressed: () {
-                // Navigate to Pet List or Pet Details page
+                // Navigate to Pet List and pass the pets list
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PetListPage()),
+                  MaterialPageRoute(
+                    builder: (context) => PetListPage(pets: []), // Pass the pets list to PetListPage
+                  ),
                 );
               },
               child: Text('Explore Available Pets'),
